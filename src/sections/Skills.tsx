@@ -31,22 +31,22 @@ const Skills = () => {
   }, [])
 
   return (
-    <section id="skills" className="py-24 px-6 bg-sky-50">
+    <section id="skills" className="py-24 px-6 bg-amber-50">
       <div ref={ref} className="fade-up max-w-4xl mx-auto">
-        <p className="text-cyan-600 uppercase tracking-widest text-sm mb-3 text-center">What I Know</p>
+        <p className="text-amber-600 uppercase tracking-widest text-sm mb-3 text-center font-semibold">What I Know</p>
         <h2 className="text-4xl font-bold text-gray-900 text-center mb-16">My Skills</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {skills.map((skill) => (
-            <div key={skill.name} className="bg-white border border-sky-100 rounded-xl p-5 shadow-sm">
+            <div key={skill.name} className="bg-white border border-amber-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex justify-between mb-2">
                 <span className="text-gray-700 font-medium">{skill.name}</span>
-                <span className="text-cyan-600 font-semibold">{skill.level}%</span>
+                <span className="text-amber-600 font-semibold">{skill.level}%</span>
               </div>
-              <div className="h-2 bg-sky-100 rounded-full overflow-hidden">
+              <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full"
+                  className="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full"
                   style={{
-                    width: animated ? `${skill.level}%` : '0%',
+                    width: animated? `${skill.level}%` : '0%',
                     transition: 'width 1.2s ease-out',
                   }}
                 />
