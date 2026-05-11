@@ -45,34 +45,144 @@ const About = () => {
   const counts = [count0, count1, count2]
 
   return (
-    <section id="about" className="py-24 px-6 bg-gray-50">
-      <div ref={ref} className="fade-up max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <section
+      id="about"
+      className="relative py-28 px-6 overflow-hidden"
+      style={{ background: '#0e0e0e' }}
+    >
+      {/* Subtle gold glow top left */}
+      <div
+        className="absolute top-0 left-0 w-96 h-96 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at top left, rgba(240,192,96,0.08) 0%, transparent 70%)',
+        }}
+      />
 
-        <div className="flex justify-center">
-          <div className="w-64 h-64 rounded-2xl bg-gradient-to-br from-amber-50 to-yellow-100 border border-amber-200 flex items-center justify-center text-6xl shadow-lg">
+      {/* Section label — editorial style */}
+      <div className="max-w-6xl mx-auto mb-16">
+        <div className="flex items-center gap-4">
+          <div style={{ width: '40px', height: '1px', background: '#f0c060' }} />
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '11px',
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase',
+              color: '#f0c060',
+            }}
+          >
+            About Me
+          </p>
+        </div>
+      </div>
+
+      <div ref={ref} className="fade-up max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+
+        {/* LEFT — Large editorial quote + photo placeholder */}
+        <div className="flex flex-col gap-10">
+
+          {/* Big decorative quote */}
+          <div>
+            <p
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: 'clamp(36px, 4vw, 56px)',
+                fontWeight: 700,
+                fontStyle: 'italic',
+                color: '#ffffff',
+                lineHeight: 1.2,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              "Crafting the web,{' '}
+              <span style={{ color: '#f0c060' }}>one pixel</span>{' '}
+              at a time."
+            </p>
+          </div>
+
+          {/* Photo box */}
+          <div
+            className="w-56 h-56 rounded-2xl flex items-center justify-center text-5xl"
+            style={{
+              background: 'rgba(240,192,96,0.06)',
+              border: '1px solid rgba(240,192,96,0.2)',
+            }}
+          >
             👤
           </div>
         </div>
 
+        {/* RIGHT — Bio + Stats */}
         <div>
-          <p className="text-amber-600 uppercase tracking-widest text-sm mb-3 font-semibold">About Me</p>
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">Who I Am</h2>
-          <p className="text-gray-700 text-lg leading-relaxed mb-4">
+          <h2
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(32px, 3.5vw, 48px)',
+              fontWeight: 700,
+              color: '#ffffff',
+              marginBottom: '24px',
+              lineHeight: 1.2,
+            }}
+          >
+            Who I Am
+          </h2>
+
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '16px',
+              lineHeight: 1.8,
+              color: 'rgba(255,255,255,0.65)',
+              marginBottom: '16px',
+              fontWeight: 300,
+            }}
+          >
             Hi! I'm Vishnupriya, a frontend developer based in Ponnani, Kerala.
             I specialize in building responsive, user-friendly web applications with React.
           </p>
-          <p className="text-gray-700 text-lg leading-relaxed mb-8">
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '16px',
+              lineHeight: 1.8,
+              color: 'rgba(255,255,255,0.65)',
+              marginBottom: '40px',
+              fontWeight: 300,
+            }}
+          >
             I'm currently pursuing my degree and focusing on modern web technologies.
             When I'm not coding, I enjoy exploring new frameworks and contributing to open source.
           </p>
 
-          <div ref={statsRef} className="flex gap-8">
+          {/* Stats */}
+          <div ref={statsRef} className="flex gap-10">
             {stats.map((stat, i) => (
               <div key={stat.label}>
-                <p className="text-3xl font-bold text-amber-600">
+                {/* Thin gold line above number */}
+                <div style={{ width: '24px', height: '2px', background: '#f0c060', marginBottom: '10px' }} />
+                <p
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: '42px',
+                    fontWeight: 700,
+                    color: '#f0c060',
+                    lineHeight: 1,
+                  }}
+                >
                   {counts[i]}{stat.suffix}
                 </p>
-                <p className="text-gray-500 text-sm mt-1">{stat.label}</p>
+                <p
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: '12px',
+                    color: 'rgba(255,255,255,0.4)',
+                    marginTop: '6px',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
