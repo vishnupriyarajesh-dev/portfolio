@@ -5,34 +5,20 @@ const roles = ['Frontend Developer', 'React Developer', 'UI Enthusiast', 'Proble
 
 const Hero = () => {
   const typedText = useTypingEffect(roles)
-
-  // Refs for each animated element
-  const nameRef = useRef<HTMLDivElement>(null)
-  const bioRef = useRef<HTMLDivElement>(null)
-  const buttonsRef = useRef<HTMLDivElement>(null)
-  const typingRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Load Playfair Display font
-    const link = document.createElement('link')
-    link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap'
-    link.rel = 'stylesheet'
-    document.head.appendChild(link)
-
-    // Trigger fade-up animations with staggered delays on mount
-    const elements = [
-      { ref: nameRef, delay: 100 },
-      { ref: bioRef, delay: 300 },
-      { ref: buttonsRef, delay: 500 },
-      { ref: typingRef, delay: 700 },
-    ]
-
-    elements.forEach(({ ref, delay }) => {
-      if (ref.current) {
-        setTimeout(() => {
-          ref.current?.classList.add('animate-in')
-        }, delay)
-      }
+    // Staggered fade-in on mount
+    const elements = contentRef.current?.querySelectorAll('.hero-animate')
+    elements?.forEach((el, i) => {
+      const elem = el as HTMLElement
+      elem.style.opacity = '0'
+      elem.style.transform = 'translateY(28px)'
+      setTimeout(() => {
+        elem.style.transition = 'opacity 0.8s ease, transform 0.8s ease'
+        elem.style.opacity = '1'
+        elem.style.transform = 'translateY(0)'
+      }, 200 + i * 150)
     })
   }, [])
 
@@ -51,62 +37,193 @@ const Hero = () => {
       />
 
       {/* ── DARK OVERLAY ── */}
-      <div className="absolute inset-0 z-0" style={{ background: 'rgba(0,0,0,0.4)' }} />
+      <div className="absolute inset-0 z-0" style={{ background: 'rgba(0,0,0,0.52)' }} />
 
-      {/* ── CONTENT ── */}
-      <div className="relative z-10 flex-1 flex flex-col justify-between px-12 py-8">
+      {/* ── MOBILE LAYOUT ── */}
+      <div ref={contentRef} className="relative z-10 flex flex-col justify-between min-h-screen px-6 py-8 md:hidden">
 
-        {/* LEFT CENTER — Hello I'm + Name */}
-        <div className="flex-1 flex items-center">
-          <div ref={nameRef} className="fade-up">
-            <p
-              className="uppercase tracking-[0.4em] mb-5 font-medium"
-              style={{
-                color: '#f0c060',
-                fontSize: '22px',
-                fontFamily: 'DM Sans, sans-serif',
-                textShadow: '0 0 30px rgba(240,192,96,0.5)',
-              }}
-            >
+        <div style={{ height: '64px' }} />
+
+        <div className="flex flex-col gap-6">
+          {/* Hello I'm + Name */}
+          <div className="hero-animate">
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '13px',
+              letterSpacing: '0.25em',
+              textTransform: 'uppercase',
+              color: '#f0c060',
+              marginBottom: '8px',
+              fontWeight: 300,
+            }}>
               Hello, I'm
             </p>
-            <h1
-              className="font-bold leading-none text-white"
+            <h1 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(48px, 12vw, 72px)',
+              fontWeight: 700,
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+              color: '#ffffff',
+            }}>
+              Vishnu
+              <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#f0c060' }}>
+                priya
+              </span>
+            </h1>
+          </div>
+
+          {/* GitHub badge */}
+          <div className="hero-animate">
+            <a
+              href="https://github.com/vishnupriyarajesh-dev"
+              target="_blank"
+              rel="noreferrer"
               style={{
-                fontSize: 'clamp(48px, 6vw, 90px)',
-                letterSpacing: '-0.02em',
-                fontFamily: 'Playfair Display, serif',
-                textShadow: '0 2px 40px rgba(0,0,0,0.5)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 16px',
+                borderRadius: '999px',
+                background: 'rgba(255,255,255,0.08)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(240,192,96,0.3)',
+                color: '#f0c060',
+                textDecoration: 'none',
+                fontSize: '12px',
+                letterSpacing: '0.08em',
+                fontFamily: "'DM Sans', sans-serif",
               }}
             >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+              @vishnupriyarajesh-dev
+            </a>
+          </div>
+
+          {/* Bio text */}
+          <div className="hero-animate">
+            <p style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '20px',
+              fontStyle: 'italic',
+              fontWeight: 400,
+              color: '#ffffff',
+              lineHeight: 1.4,
+              textShadow: '0 2px 16px rgba(0,0,0,0.7)',
+              marginBottom: '8px',
+            }}>
+              Building interfaces that speak{' '}
+              <span style={{ color: '#f0c060', fontWeight: 700, fontStyle: 'normal' }}>
+                louder than code.
+              </span>
+            </p>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '13px',
+              color: 'rgba(255,255,255,0.5)',
+              lineHeight: 1.7,
+              fontWeight: 300,
+            }}>
+             Creating digital experiences with depth and intention.
+            </p>
+          </div>
+        </div>
+
+        {/* BOTTOM */}
+        <div className="flex flex-col gap-4 pb-4 hero-animate">
+          <div style={{
+            alignSelf: 'center',
+            padding: '10px 20px',
+            borderRadius: '999px',
+            background: 'rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(240,192,96,0.3)',
+          }}>
+            <span style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '13px',
+              fontWeight: 500,
+              letterSpacing: '0.1em',
+              color: '#f0c060',
+            }}>
+              {typedText}<span className="animate-pulse">|</span>
+            </span>
+          </div>
+
+          <div className="flex gap-3">
+            <a href="#projects" style={{
+              flex: 1, textAlign: 'center', padding: '14px',
+              borderRadius: '8px', background: '#f0c060', color: '#0c0c0c',
+              fontFamily: "'DM Sans', sans-serif", fontSize: '13px',
+              fontWeight: 500, letterSpacing: '0.08em', textDecoration: 'none',
+            }}>
+              View My Work
+            </a>
+            <a href="#contact" style={{
+              flex: 1, textAlign: 'center', padding: '14px',
+              borderRadius: '8px', border: '1px solid rgba(240,192,96,0.5)',
+              color: '#f0c060', fontFamily: "'DM Sans', sans-serif",
+              fontSize: '13px', fontWeight: 500, letterSpacing: '0.08em', textDecoration: 'none',
+            }}>
+              Contact Me
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* ── DESKTOP LAYOUT ── */}
+      <div className="relative z-10 flex-1 flex-col justify-between px-12 py-8 hidden md:flex">
+
+        <div className="flex-1 flex items-center">
+          <div ref={contentRef}>
+            <p className="hero-animate" style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '22px',
+              letterSpacing: '0.25em',
+              textTransform: 'uppercase',
+              color: '#f0c060',
+              marginBottom: '12px',
+              fontWeight: 300,
+              textShadow: '0 2px 12px rgba(0,0,0,0.5)',
+            }}>
+              Hello, I'm
+            </p>
+            <h1 className="hero-animate" style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(48px, 6vw, 90px)',
+              fontWeight: 700,
+              lineHeight: 1,
+              letterSpacing: '-0.01em',
+              color: '#ffffff',
+              textShadow: '0 4px 24px rgba(0,0,0,0.6)',
+            }}>
               Vishnu
-              <span className="italic font-normal" style={{ color: '#f0c060' }}>
+              <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#f0c060' }}>
                 priya
               </span>
             </h1>
           </div>
         </div>
 
-        {/* RIGHT — Floating bio text + GitHub badge */}
-        <div
-          ref={bioRef}
-          className="fade-up absolute right-12 top-1/2 -translate-y-1/2 flex flex-col items-end gap-6 max-w-xs text-right"
-        >
-          {/* GitHub badge */}
+        {/* RIGHT */}
+        <div className="absolute right-12 top-1/2 -translate-y-1/2 flex flex-col items-end gap-6" style={{ maxWidth: '320px' }}>
           <a
             href="https://github.com/vishnupriyarajesh-dev"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-xs tracking-widest transition-colors"
+            className="hero-animate"
             style={{
-              background: 'rgba(255,255,255,0.08)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(240,192,96,0.4)',
-              color: '#f0c060',
-              fontFamily: 'DM Sans, sans-serif',
+              display: 'flex', alignItems: 'center', gap: '8px',
+              padding: '8px 18px', borderRadius: '999px',
+              background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(240,192,96,0.4)', color: '#f0c060',
+              textDecoration: 'none', fontSize: '12px', letterSpacing: '0.1em',
+              fontFamily: "'DM Sans', sans-serif", transition: 'background 0.25s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(240,192,96,0.15)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
+            onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(240,192,96,0.15)'}
+            onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.08)'}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
@@ -114,96 +231,89 @@ const Hero = () => {
             @vishnupriyarajesh-dev
           </a>
 
-          {/* Floating bio text — no card */}
-          <div>
-            <p
-              className="leading-snug mb-3"
-              style={{
-                fontFamily: 'Playfair Display, serif',
-                fontSize: '22px',
-                fontStyle: 'italic',
-                color: '#ffffff',
-                textShadow: '0 2px 20px rgba(0,0,0,0.8)',
-              }}
-            >
+          <div className="hero-animate text-right">
+            <p style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '22px', fontStyle: 'italic', fontWeight: 400,
+              color: '#ffffff', lineHeight: 1.4,
+              textShadow: '0 2px 16px rgba(0,0,0,0.7)', marginBottom: '10px',
+            }}>
               Building interfaces that speak{' '}
-              <span style={{ color: '#f0c060' }}>louder than code.</span>
+              <span style={{ color: '#f0c060', fontWeight: 700, fontStyle: 'normal' }}>
+                louder than code.
+              </span>
             </p>
-            <p
-              style={{
-                fontFamily: 'DM Sans, sans-serif',
-                fontSize: '13px',
-                lineHeight: '1.8',
-                color: 'rgba(255,255,255,0.55)',
-                textShadow: '0 1px 10px rgba(0,0,0,0.6)',
-              }}
-            >
-              I build clean, responsive, and user-friendly web experiences with a focus on clarity and intent.
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: '13px',
+              color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, fontWeight: 300,
+            }}>
+              Creating digital experiences with depth and intention.
             </p>
           </div>
         </div>
 
-        {/* BOTTOM — Buttons + Typing + Scroll */}
+        {/* BOTTOM */}
         <div className="flex items-end justify-between pb-2">
-
-          {/* Buttons */}
-          <div ref={buttonsRef} className="fade-up flex gap-3">
-            <a
-              href="#projects"
-              className="px-6 py-2.5 text-sm font-medium rounded-lg transition-colors"
-              style={{ background: '#f0c060', color: '#1a1a1a', fontFamily: 'DM Sans, sans-serif' }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#e0b050')}
-              onMouseLeave={e => (e.currentTarget.style.background = '#f0c060')}
+          <div className="flex gap-3 hero-animate">
+            <a href="#projects" style={{
+              padding: '12px 28px', borderRadius: '8px',
+              background: '#f0c060', color: '#0c0c0c',
+              fontFamily: "'DM Sans', sans-serif", fontSize: '13px',
+              fontWeight: 500, letterSpacing: '0.05em', textDecoration: 'none',
+              transition: 'background 0.25s',
+            }}
+              onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = '#e0b050'}
+              onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = '#f0c060'}
             >
               View My Work
             </a>
-            <a
-              href="#contact"
-              className="px-6 py-2.5 text-sm font-medium rounded-lg transition-colors"
-              style={{
-                border: '1px solid rgba(240,192,96,0.6)',
-                color: '#f0c060',
-                background: 'transparent',
-                fontFamily: 'DM Sans, sans-serif',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(240,192,96,0.1)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            <a href="#contact" style={{
+              padding: '12px 28px', borderRadius: '8px',
+              border: '1px solid rgba(240,192,96,0.6)', color: '#f0c060',
+              fontFamily: "'DM Sans', sans-serif", fontSize: '13px',
+              fontWeight: 500, letterSpacing: '0.05em', textDecoration: 'none',
+              transition: 'background 0.25s',
+            }}
+              onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(240,192,96,0.1)'}
+              onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}
             >
               Contact Me
             </a>
           </div>
 
-          {/* Typing animation — bottom center */}
-          <div
-            ref={typingRef}
-            className="fade-up absolute left-1/2 -translate-x-1/2 bottom-8 px-6 py-3 rounded-full"
-            style={{
-              background: 'rgba(255,255,255,0.08)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(240,192,96,0.3)',
-            }}
-          >
-            <span
-              className="text-sm font-medium tracking-widest"
-              style={{ color: '#f0c060', fontFamily: 'DM Sans, sans-serif' }}
-            >
+          {/* Typing animation */}
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-8 px-6 py-3 rounded-full hero-animate" style={{
+            background: 'rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(240,192,96,0.3)',
+          }}>
+            <span style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: '13px',
+              fontWeight: 500, letterSpacing: '0.15em', color: '#f0c060',
+            }}>
               {typedText}<span className="animate-pulse">|</span>
             </span>
           </div>
 
-          {/* Scroll hint */}
-          <div
-            className="flex items-center gap-2 text-xs tracking-widest uppercase"
-            style={{ color: 'rgba(240,192,96,0.6)', fontFamily: 'DM Sans, sans-serif' }}
-          >
+          <div className="flex items-center gap-2 hero-animate" style={{
+            color: 'rgba(240,192,96,0.6)',
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase',
+          }}>
             <span>Scroll</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M12 5v14M5 12l7 7 7-7"/>
             </svg>
           </div>
-
         </div>
       </div>
+
+      <style>{`
+        @keyframes goldPulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.6; }
+        }
+      `}</style>
     </section>
   )
 }

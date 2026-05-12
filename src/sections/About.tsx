@@ -71,7 +71,7 @@ const About = () => {
               color: '#f0c060',
             }}
           >
-            About Me
+            Behind the interface
           </p>
         </div>
       </div>
@@ -94,22 +94,18 @@ const About = () => {
                 letterSpacing: '-0.02em',
               }}
             >
-              "Crafting the web,{' '}
-              <span style={{ color: '#f0c060' }}>one pixel</span>{' '}
-              at a time."
+              "Thoughtfully designed.{' '}
+              <span style={{ color: '#f0c060' }}>Carefully built."</span>{' '}
             </p>
           </div>
 
           {/* Photo box */}
-          <div
-            className="w-56 h-56 rounded-2xl flex items-center justify-center text-5xl"
-            style={{
-              background: 'rgba(240,192,96,0.06)',
-              border: '1px solid rgba(240,192,96,0.2)',
-            }}
-          >
-            👤
-          </div>
+          <img
+  src="v-about.png"
+  alt="Vishnupriya"
+  className="w-56 h-56 rounded-2xl object-cover object-top"
+  style={{ border: '1px solid rgba(240,192,96,0.2)' }}
+/>
         </div>
 
         {/* RIGHT — Bio + Stats */}
@@ -124,7 +120,7 @@ const About = () => {
               lineHeight: 1.2,
             }}
           >
-            Who I Am
+            About me
           </h2>
 
           <p
@@ -137,9 +133,9 @@ const About = () => {
               fontWeight: 300,
             }}
           >
-            Hi! I'm Vishnupriya, a frontend developer based in Ponnani, Kerala.
-            I specialize in building responsive, user-friendly web applications with React.
-          </p>
+            Hi! I'm Vishnupriya, a frontend-focused student developer based in Thrissur, Kerala.
+            I enjoy building interfaces that feel clean, intuitive and visually intentional.
+            </p>
           <p
             style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -150,8 +146,7 @@ const About = () => {
               fontWeight: 300,
             }}
           >
-            I'm currently pursuing my degree and focusing on modern web technologies.
-            When I'm not coding, I enjoy exploring new frameworks and contributing to open source.
+            I'm currently pursuing my degree while exploring modern web technologies, interaction design and digital experiences that feel immersive yet effortless to use.
           </p>
 
           {/* Stats */}
