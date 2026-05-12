@@ -45,7 +45,7 @@ const Skills = () => {
     const observers: IntersectionObserver[] = []
 
     const observe = (
-      ref: React.RefObject<HTMLDivElement>,
+      ref: React.RefObject<HTMLDivElement | null>,
       setter: (v: boolean) => void,
       threshold = 0.2
     ) => {
