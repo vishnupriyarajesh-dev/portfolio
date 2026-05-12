@@ -20,9 +20,9 @@ const useCounter = (target: number, duration = 1500, start: boolean) => {
 }
 
 const stats = [
-  { label: 'Projects Built', value: 5, suffix: '+' },
+  { label: 'Projects Built', value: 1, suffix: '+' },
   { label: 'Years Learning', value: 2, suffix: '+' },
-  { label: 'Technologies', value: 8, suffix: '+' },
+  { label: 'Technologies', value: 5, suffix: '+' },
 ]
 
 const About = () => {

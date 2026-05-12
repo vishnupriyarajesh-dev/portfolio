@@ -7,25 +7,10 @@ const projects = [
     thumbnail: "/iss-tracker.png",
     description: "A real-time International Space Station tracker showing its live location on an interactive globe.",
     tech: ["React", "JavaScript", "CSS"],
-    github: "https://github.com/yourusername/iss-tracker",
-    live: "https://your-netlify-link.netlify.app"
+    github: "https://github.com/vishnupriyarajesh-dev/isstracker",
+    live: "https://v-isstracker.vercel.app"
   },
-  {
-    title: "Project Two",
-    thumbnail: "",
-    description: "A brief description of what this project does and the problem it solves.",
-    tech: ["JavaScript", "HTML", "CSS"],
-    github: "https://github.com/yourusername/project-two",
-    live: ""
-  },
-  {
-    title: "Project Three",
-    thumbnail: "",
-    description: "A brief description of what this project does and the problem it solves.",
-    tech: ["Python", "Node.js"],
-    github: "https://github.com/yourusername/project-three",
-    live: ""
-  },
+
 ]
 
 const TiltCard = ({ project, index, visible }: { project: typeof projects[0], index: number, visible: boolean }) => {
