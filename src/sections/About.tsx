@@ -63,7 +63,7 @@ const About = () => {
         <div className="flex items-center gap-4">
           <div style={{ width: '40px', height: '1px', background: '#f0c060' }} />
           <p
-            style={{
+              style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: '11px',
               letterSpacing: '0.3em',
@@ -71,8 +71,10 @@ const About = () => {
               color: '#f0c060',
             }}
           >
-            Behind the interface
+            Behind the interface   
           </p>
+          <div
+          style={{ width: '40px', height: '1px', background: '#f0c060'}} />
         </div>
       </div>
 

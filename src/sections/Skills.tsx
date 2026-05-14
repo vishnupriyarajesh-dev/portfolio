@@ -1,34 +1,44 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   FaReact,
-  FaFigma,
   FaGithub,
+  FaDatabase,
+  FaServer,
+  FaLayerGroup,
+  FaMagic,
+  FaPenNib,
 } from 'react-icons/fa'
+
 import {
   SiJavascript,
   SiTailwindcss,
+  SiPython,
 } from 'react-icons/si'
 
 const tools = [
   { name: 'React', icon: <FaReact />, color: '#61DAFB' },
   { name: 'JavaScript', icon: <SiJavascript />, color: '#F7DF1E' },
+  { name: 'Python', icon: <SiPython />, color: '#3776AB' },
   { name: 'Tailwind CSS', icon: <SiTailwindcss />, color: '#38BDF8' },
-  { name: 'Figma', icon: <FaFigma />, color: '#F24E1E' },
+  { name: 'REST APIs', icon: <FaServer />, color: '#f0c060' },
+  { name: 'SQL', icon: <FaDatabase />, color: '#7dd3fc' },
   { name: 'GitHub', icon: <FaGithub />, color: '#ffffff' },
 ]
-
 const building = [
   {
     title: 'Responsive Interfaces',
     description: 'Creating clean and fluid layouts that feel seamless across devices.',
+    icon: <FaLayerGroup />,
   },
   {
     title: 'Interactive Frontends',
     description: 'Building subtle interactions and animations that enhance user experience.',
+    icon: <FaMagic />,
   },
   {
     title: 'Elegant Design Systems',
     description: 'Combining typography, spacing and consistency into polished interfaces.',
+    icon: <FaPenNib />,
   },
 ]
 
@@ -193,15 +203,17 @@ const Skills = () => {
             <div
               key={item.title}
               style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: '20px',
-                padding: '32px',
-                transition: 'all 0.35s ease',
-                opacity: cardsVisible ? 1 : 0,
-                transform: cardsVisible ? 'translateY(0)' : 'translateY(40px)',
-                transitionDelay: `${i * 0.15}s`,
-              }}
+  background:
+    'linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(240,192,96,0.025) 100%)',
+  border: '1px solid rgba(240,192,96,0.10)',
+  borderRadius: '20px',
+  padding: '32px',
+  transition: 'all 0.35s ease',
+  opacity: cardsVisible ? 1 : 0,
+  transform: cardsVisible ? 'translateY(0)' : 'translateY(40px)',
+  transitionDelay: `${i * 0.15}s`,
+  boxShadow: '0 0 25px rgba(240,192,96,0.03)',
+}}
               onMouseEnter={e => {
                 e.currentTarget.style.border = '1px solid rgba(240,192,96,0.3)'
                 e.currentTarget.style.background = 'linear-gradient(135deg, rgba(240,192,96,0.05) 0%, rgba(255,255,255,0.03) 100%)'
@@ -209,12 +221,31 @@ const Skills = () => {
                 e.currentTarget.style.boxShadow = '0 0 30px rgba(240,192,96,0.06)'
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.border = '1px solid rgba(255,255,255,0.08)'
-                e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
-                e.currentTarget.style.transform = 'translateY(0px)'
-                e.currentTarget.style.boxShadow = 'none'
-              }}
+  e.currentTarget.style.border = '1px solid rgba(240,192,96,0.10)'
+  e.currentTarget.style.background =
+    'linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(240,192,96,0.025) 100%)'
+  e.currentTarget.style.transform = 'translateY(0px)'
+  e.currentTarget.style.boxShadow = '0 0 25px rgba(240,192,96,0.03)'
+}}
             >
+              <div
+  style={{
+    width: '52px',
+    height: '52px',
+    borderRadius: '14px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '22px',
+    background: 'rgba(240,192,96,0.08)',
+    border: '1px solid rgba(240,192,96,0.18)',
+    color: '#f0c060',
+    fontSize: '20px',
+    boxShadow: '0 0 20px rgba(240,192,96,0.08)',
+  }}
+>
+  {item.icon}
+</div>
               <h3 style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: '24px',
