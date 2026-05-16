@@ -148,7 +148,7 @@ const About = () => {
               fontWeight: 300,
             }}
           >
-            I'm currently pursuing my degree while exploring modern web technologies, interaction design and digital experiences that feel immersive yet effortless to use.
+            I'm currently waiting for my 12th results while exploring modern web technologies, interaction design and digital experiences that feel immersive yet effortless to use.
           </p>
 
           {/* Stats */}

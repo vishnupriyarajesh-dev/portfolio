@@ -13,7 +13,7 @@ const Footer = () => {
   const resourceLinks = [
     { label: 'GitHub', href: 'https://github.com/vishnupriyarajesh-dev' },
     { label: 'LinkedIn', href: 'https://linkedin.com/in/vishnupriya-rajesh' },
-    { label: 'Resume', href: 'Vishnupriya Rajesh - Resume.pdf' },
+    { label: 'Resume', href: 'VishnupriyaRajesh-Resume.pdf' },
     { label: 'Email', href: 'mailto:vishnupriyarajesh7b@gmail.com' },
   ]
 
