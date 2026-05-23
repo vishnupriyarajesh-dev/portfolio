@@ -3,14 +3,30 @@ import { useState, useEffect, useRef } from 'react'
 
 const projects = [
   {
-    title: "ISS Tracker",
-    thumbnail: "/iss-tracker.png",
-    description: "A real-time International Space Station tracker showing its live location on an interactive globe.",
-    tech: ["React", "JavaScript", "CSS"],
-    github: "https://github.com/vishnupriyarajesh-dev/isstracker",
-    live: "https://v-isstracker.vercel.app"
+  title: "ISS Tracker",
+  thumbnail: "/iss-tracker.png",
+  description: "Real-time International Space Station tracker featuring live orbital positioning, interactive 2D/3D visualization, and dynamic day-night mapping.",
+  tech: ["React", "React Globe", "Leaflet"],
+  github: "https://github.com/vishnupriyarajesh-dev/isstracker",
+  live: "https://v-isstracker.vercel.app"
+},
+  {
+    title: "ScholarAI",
+    thumbnail: "/aiss.png",
+    description: "Interactive AI study platform featuring tutoring, flashcards, quizzes, note summarization, and study planning tools.",
+    tech: ["React + Vite", "OpenRouter API", "Custom CSS"],
+    github: "https://github.com/vishnupriyarajesh-dev/ScholarAI",
+    live: "https://getscholarai.vercel.app"
   },
 
+  {
+    title: "AtmoSense",
+    thumbnail: "/cli.png",
+    description: "Modern climate intelligence dashboard with real-time weather analytics, forecasts, atmospheric metrics, and data visualization.",
+    tech: ["React + Vite", "Tailwind CSS", "Open-Meteo API"],
+    github: "https://github.com/vishnupriyarajesh-dev/AtmoSense",
+    live: "https://atmosense-web.vercel.app"
+  },
 ]
 
 const TiltCard = ({ project, index, visible }: { project: typeof projects[0], index: number, visible: boolean }) => {
