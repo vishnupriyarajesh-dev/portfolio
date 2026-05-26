@@ -6,14 +6,24 @@ const useCounter = (target: number, duration = 1500, start: boolean) => {
 
   useEffect(() => {
     if (!start) return
-    let startTime: number
+
+    let startTime = 0
+    let frame = 0
+
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp
+
       const progress = Math.min((timestamp - startTime) / duration, 1)
-      setCount(Math.floor(progress * target))
-      if (progress < 1) requestAnimationFrame(step)
+      const eased = 1 - Math.pow(1 - progress, 3)
+
+      setCount(Math.floor(eased * target))
+
+      if (progress < 1) frame = requestAnimationFrame(step)
     }
-    requestAnimationFrame(step)
+
+    frame = requestAnimationFrame(step)
+
+    return () => cancelAnimationFrame(frame)
   }, [start, target, duration])
 
   return count
@@ -26,165 +36,110 @@ const stats = [
 ]
 
 const About = () => {
+  const labelRef = useScrollAnimation()
   const ref = useScrollAnimation()
   const statsRef = useRef<HTMLDivElement>(null)
   const [started, setStarted] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setStarted(true); observer.disconnect() } },
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStarted(true)
+          observer.disconnect()
+        }
+      },
       { threshold: 0.3 }
     )
+
     if (statsRef.current) observer.observe(statsRef.current)
+
     return () => observer.disconnect()
   }, [])
 
-  const count0 = useCounter(stats[0].value, 1500, started)
-  const count1 = useCounter(stats[1].value, 1500, started)
-  const count2 = useCounter(stats[2].value, 1500, started)
-  const counts = [count0, count1, count2]
+  const counts = [
+    useCounter(stats[0].value, 1500, started),
+    useCounter(stats[1].value, 1500, started),
+    useCounter(stats[2].value, 1500, started),
+  ]
 
   return (
     <section
       id="about"
-      className="relative py-28 px-6 overflow-hidden"
-      style={{ background: '#0e0e0e' }}
+      className="relative overflow-hidden bg-[#0e0e0e] px-6 py-28"
     >
-      {/* Subtle gold glow top left */}
-      <div
-        className="absolute top-0 left-0 w-96 h-96 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at top left, rgba(240,192,96,0.08) 0%, transparent 70%)',
-        }}
-      />
+      <div className="pointer-events-none absolute left-0 top-0 h-96 w-96 bg-[radial-gradient(ellipse_at_top_left,rgba(240,192,96,0.08),transparent_70%)]" />
 
-      {/* Section label — editorial style */}
-      <div className="max-w-6xl mx-auto mb-16">
-        <div className="flex items-center gap-4">
-          <div style={{ width: '40px', height: '1px', background: '#f0c060' }} />
-          <p
-              style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: '11px',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: '#f0c060',
-            }}
-          >
-            Behind the interface   
+      <div ref={labelRef} className="fade-up mx-auto mb-16 max-w-6xl">
+        <div className="flex items-center justify-center gap-4">
+          <span className="section-line h-px bg-[#f0c060]" />
+          <p className="font-sans text-[11px] uppercase tracking-[0.3em] text-[#f0c060]">
+            Behind the interface
           </p>
-          <div
-          style={{ width: '40px', height: '1px', background: '#f0c060'}} />
+          <span className="section-line h-px bg-[#f0c060]" />
         </div>
       </div>
 
-      <div ref={ref} className="fade-up max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-
-        {/* LEFT — Large editorial quote + photo placeholder */}
+      <div
+        ref={ref}
+        className="fade-up mx-auto grid max-w-6xl items-center gap-16 md:grid-cols-2 md:gap-20"
+      >
         <div className="flex flex-col gap-10">
+          <p
+            className="font-serif text-[clamp(36px,4vw,56px)] font-bold italic leading-[1.2] tracking-normal text-white"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            "Thoughtfully designed.{' '}
+            <span className="text-[#f0c060]">Carefully built."</span>
+          </p>
 
-          {/* Big decorative quote */}
-          <div>
-            <p
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 'clamp(36px, 4vw, 56px)',
-                fontWeight: 700,
-                fontStyle: 'italic',
-                color: '#ffffff',
-                lineHeight: 1.2,
-                letterSpacing: '-0.02em',
-              }}
-            >
-              "Thoughtfully designed.{' '}
-              <span style={{ color: '#f0c060' }}>Carefully built."</span>{' '}
-            </p>
-          </div>
-
-          {/* Photo box */}
           <img
-  src="v-about.png"
-  alt="Vishnupriya"
-  className="w-56 h-56 rounded-2xl object-cover object-top"
-  style={{ border: '1px solid rgba(240,192,96,0.2)' }}
-/>
+            src="/v-about.png"
+            alt="Vishnupriya Rajesh"
+            className="h-56 w-56 rounded-2xl border border-[#f0c060]/20 object-cover object-top shadow-[0_24px_70px_rgba(0,0,0,0.32)] transition duration-500 hover:-translate-y-1 hover:border-[#f0c060]/35"
+          />
         </div>
 
-        {/* RIGHT — Bio + Stats */}
         <div>
           <h2
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: 'clamp(32px, 3.5vw, 48px)',
-              fontWeight: 700,
-              color: '#ffffff',
-              marginBottom: '24px',
-              lineHeight: 1.2,
-            }}
+            className="mb-6 font-serif text-[clamp(32px,3.5vw,48px)] font-bold leading-tight text-white"
+            style={{ fontFamily: "'Playfair Display', serif" }}
           >
             About me
           </h2>
 
-          <p
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: '16px',
-              lineHeight: 1.8,
-              color: 'rgba(255,255,255,0.65)',
-              marginBottom: '16px',
-              fontWeight: 300,
-            }}
-          >
-            Hi! I'm Vishnupriya, a frontend-focused student developer based in Thrissur, Kerala.
-            I enjoy building interfaces that feel clean, intuitive and visually intentional.
-            </p>
-          <p
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: '16px',
-              lineHeight: 1.8,
-              color: 'rgba(255,255,255,0.65)',
-              marginBottom: '40px',
-              fontWeight: 300,
-            }}
-          >
-            I'm currently waiting for my 12th results while exploring modern web technologies, interaction design and digital experiences that feel immersive yet effortless to use.
+          <p className="mb-4 font-sans text-base font-light leading-8 text-white/65">
+            Hi! I'm Vishnupriya, a frontend-focused student developer based in
+            Thrissur, Kerala. I enjoy building interfaces that feel clean,
+            intuitive and visually intentional.
           </p>
 
-          {/* Stats */}
-          <div ref={statsRef} className="flex gap-10">
-            {stats.map((stat, i) => (
-              <div key={stat.label}>
-                {/* Thin gold line above number */}
-                <div style={{ width: '24px', height: '2px', background: '#f0c060', marginBottom: '10px' }} />
+          <p className="mb-10 font-sans text-base font-light leading-8 text-white/65">
+            I'm currently exploring modern web
+            technologies, interaction design and digital experiences that feel
+            immersive yet effortless to use.
+          </p>
+
+          <div ref={statsRef} className="grid grid-cols-3 gap-6 md:gap-10">
+            {stats.map((stat, index) => (
+              <div key={stat.label} className="min-w-0">
+                <div className="mb-3 h-0.5 w-6 bg-[#f0c060]" />
+
                 <p
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: '42px',
-                    fontWeight: 700,
-                    color: '#f0c060',
-                    lineHeight: 1,
-                  }}
+                  className="font-serif text-[40px] font-bold leading-none text-[#f0c060] md:text-[42px]"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  {counts[i]}{stat.suffix}
+                  {counts[index]}
+                  {stat.suffix}
                 </p>
-                <p
-                  style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: '12px',
-                    color: 'rgba(255,255,255,0.4)',
-                    marginTop: '6px',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                  }}
-                >
+
+                <p className="mt-2 break-words font-sans text-[11px] uppercase tracking-[0.12em] text-white/40 md:text-xs">
                   {stat.label}
                 </p>
               </div>
             ))}
           </div>
         </div>
-
       </div>
     </section>
   )

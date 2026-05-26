@@ -8,12 +8,7 @@ import {
   FaMagic,
   FaPenNib,
 } from 'react-icons/fa'
-
-import {
-  SiJavascript,
-  SiTailwindcss,
-  SiPython,
-} from 'react-icons/si'
+import { SiJavascript, SiTailwindcss, SiPython } from 'react-icons/si'
 
 const tools = [
   { name: 'React', icon: <FaReact />, color: '#61DAFB' },
@@ -24,6 +19,7 @@ const tools = [
   { name: 'SQL', icon: <FaDatabase />, color: '#7dd3fc' },
   { name: 'GitHub', icon: <FaGithub />, color: '#ffffff' },
 ]
+
 const building = [
   {
     title: 'Responsive Interfaces',
@@ -42,154 +38,99 @@ const building = [
   },
 ]
 
-const Skills = () => {
-  const headerRef = useRef<HTMLDivElement>(null)
-  const toolsRef = useRef<HTMLDivElement>(null)
-  const cardsRef = useRef<HTMLDivElement>(null)
-
-  const [headerVisible, setHeaderVisible] = useState(false)
-  const [toolsVisible, setToolsVisible] = useState(false)
-  const [cardsVisible, setCardsVisible] = useState(false)
+const useInView = (threshold = 0.2) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = []
+    if (!ref.current) return
 
-    const observe = (
-      ref: React.RefObject<HTMLDivElement | null>,
-      setter: (v: boolean) => void,
-      threshold = 0.2
-    ) => {
-      if (!ref.current) return
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) { setter(true); obs.disconnect() } },
-        { threshold }
-      )
-      obs.observe(ref.current)
-      observers.push(obs)
-    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          observer.disconnect()
+        }
+      },
+      { threshold }
+    )
 
-    observe(headerRef, setHeaderVisible)
-    observe(toolsRef, setToolsVisible)
-    observe(cardsRef, setCardsVisible)
+    observer.observe(ref.current)
 
-    return () => observers.forEach(o => o.disconnect())
-  }, [])
+    return () => observer.disconnect()
+  }, [threshold])
+
+  return { ref, visible }
+}
+
+const Skills = () => {
+  const header = useInView()
+  const toolsView = useInView()
+  const cards = useInView()
 
   return (
     <section
       id="skills"
-      className="relative py-28 px-6 overflow-hidden"
-      style={{ background: '#0a0a0a' }}
+      className="relative overflow-hidden bg-[#0a0a0a] px-6 py-28"
     >
-      {/* subtle gold glow */}
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-        style={{
-          width: '650px',
-          height: '320px',
-          background: 'radial-gradient(ellipse at top, rgba(240,192,96,0.06) 0%, transparent 70%)',
-        }}
-      />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-80 w-[650px] -translate-x-1/2 bg-[radial-gradient(ellipse_at_top,rgba(240,192,96,0.06),transparent_70%)]" />
 
-      <div className="max-w-5xl mx-auto relative">
-
-        {/* section label + heading */}
+      <div className="relative mx-auto max-w-6xl">
         <div
-          ref={headerRef}
-          style={{
-            opacity: headerVisible ? 1 : 0,
-            transform: headerVisible ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+          ref={header.ref}
+          className={[
+            'transition duration-700',
+            header.visible ? 'reveal-active translate-y-0 opacity-100' : 'translate-y-8 opacity-0',
+          ].join(' ')}
         >
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <div style={{ width: '40px', height: '1px', background: '#f0c060' }} />
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: '11px',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: '#f0c060',
-            }}>
+          <div className="mb-4 flex items-center justify-center gap-4">
+            <span className="section-line h-px bg-[#f0c060]" />
+            <p className="whitespace-nowrap font-sans text-[10px] uppercase tracking-[0.24em] text-[#f0c060] sm:text-[11px] sm:tracking-[0.3em]">
               Creative Development
             </p>
-            <div style={{ width: '40px', height: '1px', background: '#f0c060' }} />
+            <span className="section-line h-px bg-[#f0c060]" />
           </div>
 
           <h2
-            className="text-center mb-20"
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: 'clamp(32px, 4vw, 52px)',
-              fontWeight: 700,
-              color: '#ffffff',
-              letterSpacing: '-0.02em',
-            }}
+            className="mb-20 text-center font-serif text-[clamp(34px,4vw,58px)] font-bold leading-tight tracking-normal text-white"
+            style={{ fontFamily: "'Playfair Display', serif" }}
           >
             What I Enjoy{' '}
-            <span style={{ color: '#f0c060', fontStyle: 'italic' }}>Building</span>
+            <span className="italic text-[#f0c060]">Building</span>
           </h2>
         </div>
 
-        {/* tools */}
         <div
-          ref={toolsRef}
-          className="mb-20 text-center"
-          style={{
-            opacity: toolsVisible ? 1 : 0,
-            transform: toolsVisible ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s',
-          }}
+          ref={toolsView.ref}
+          className={[
+            'mb-20 text-center transition duration-700',
+            toolsView.visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0',
+          ].join(' ')}
         >
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: '12px',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.45)',
-            marginBottom: '28px',
-          }}>
+          <p className="mb-7 font-sans text-xs uppercase tracking-[0.24em] text-white/45">
             Currently Working With
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
-            {tools.map((tool, i) => (
+            {tools.map((tool, index) => (
               <div
                 key={tool.name}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '12px 18px',
-                  borderRadius: '999px',
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  transition: 'all 0.3s ease',
-                  cursor: 'default',
-                  opacity: toolsVisible ? 1 : 0,
-                  transform: toolsVisible ? 'translateY(0)' : 'translateY(20px)',
-                  transitionDelay: `${0.2 + i * 0.08}s`,
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.border = '1px solid rgba(240,192,96,0.3)'
-                  e.currentTarget.style.background = 'rgba(240,192,96,0.05)'
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.border = '1px solid rgba(255,255,255,0.08)'
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
-                  e.currentTarget.style.transform = 'translateY(0px)'
-                }}
+                className={[
+                  'group flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-5 py-3',
+                  'shadow-[0_0_25px_rgba(240,192,96,0.02)] transition-all duration-300',
+                  'hover:-translate-y-1 hover:border-[#f0c060]/35 hover:bg-[#f0c060]/[0.06] hover:shadow-[0_14px_40px_rgba(240,192,96,0.05)]',
+                  toolsView.visible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0',
+                ].join(' ')}
+                style={{ transitionDelay: `${index * 70}ms` }}
               >
-                <span style={{ fontSize: '16px', color: tool.color, display: 'flex', alignItems: 'center' }}>
+                <span
+                  className="flex items-center text-base transition duration-300 group-hover:scale-110"
+                  style={{ color: tool.color }}
+                >
                   {tool.icon}
                 </span>
-                <span style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: '12px',
-                  letterSpacing: '0.08em',
-                  color: '#ffffff',
-                }}>
+
+                <span className="font-sans text-xs font-semibold tracking-[0.08em] text-white">
                   {tool.name}
                 </span>
               </div>
@@ -197,77 +138,36 @@ const Skills = () => {
           </div>
         </div>
 
-        {/* cards */}
-        <div ref={cardsRef} className="grid md:grid-cols-3 gap-6">
-          {building.map((item, i) => (
+        <div ref={cards.ref} className="grid gap-6 md:grid-cols-3">
+          {building.map((item, index) => (
             <div
               key={item.title}
-              style={{
-  background:
-    'linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(240,192,96,0.025) 100%)',
-  border: '1px solid rgba(240,192,96,0.10)',
-  borderRadius: '20px',
-  padding: '32px',
-  transition: 'all 0.35s ease',
-  opacity: cardsVisible ? 1 : 0,
-  transform: cardsVisible ? 'translateY(0)' : 'translateY(40px)',
-  transitionDelay: `${i * 0.15}s`,
-  boxShadow: '0 0 25px rgba(240,192,96,0.03)',
-}}
-              onMouseEnter={e => {
-                e.currentTarget.style.border = '1px solid rgba(240,192,96,0.3)'
-                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(240,192,96,0.05) 0%, rgba(255,255,255,0.03) 100%)'
-                e.currentTarget.style.transform = 'translateY(-4px)'
-                e.currentTarget.style.boxShadow = '0 0 30px rgba(240,192,96,0.06)'
-              }}
-              onMouseLeave={e => {
-  e.currentTarget.style.border = '1px solid rgba(240,192,96,0.10)'
-  e.currentTarget.style.background =
-    'linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(240,192,96,0.025) 100%)'
-  e.currentTarget.style.transform = 'translateY(0px)'
-  e.currentTarget.style.boxShadow = '0 0 25px rgba(240,192,96,0.03)'
-}}
+              className={[
+                'group rounded-[20px] border border-[#f0c060]/10',
+                'bg-[linear-gradient(180deg,rgba(255,255,255,0.035),rgba(240,192,96,0.025))]',
+                'p-8 shadow-[0_0_25px_rgba(240,192,96,0.03)] transition-all duration-500',
+                'hover:-translate-y-1.5 hover:border-[#f0c060]/30 hover:bg-[linear-gradient(135deg,rgba(240,192,96,0.055),rgba(255,255,255,0.03))] hover:shadow-[0_24px_80px_rgba(240,192,96,0.06)]',
+                cards.visible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0',
+              ].join(' ')}
+              style={{ transitionDelay: `${index * 130}ms` }}
             >
-              <div
-  style={{
-    width: '52px',
-    height: '52px',
-    borderRadius: '14px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '22px',
-    background: 'rgba(240,192,96,0.08)',
-    border: '1px solid rgba(240,192,96,0.18)',
-    color: '#f0c060',
-    fontSize: '20px',
-    boxShadow: '0 0 20px rgba(240,192,96,0.08)',
-  }}
->
-  {item.icon}
-</div>
-              <h3 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: '24px',
-                color: '#ffffff',
-                marginBottom: '16px',
-                letterSpacing: '-0.01em',
-              }}>
+              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#f0c060]/20 bg-[#f0c060]/10 text-xl text-[#f0c060] shadow-[0_0_20px_rgba(240,192,96,0.08)] transition duration-300 group-hover:scale-105 group-hover:border-[#f0c060]/35 group-hover:bg-[#f0c060]/15">
+                {item.icon}
+              </div>
+
+              <h3
+                className="mb-4 font-serif text-[25px] font-bold leading-tight tracking-normal text-white"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
                 {item.title}
               </h3>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: '14px',
-                lineHeight: 1.8,
-                color: 'rgba(255,255,255,0.5)',
-                fontWeight: 300,
-              }}>
+
+              <p className="font-sans text-sm font-light leading-8 text-white/50">
                 {item.description}
               </p>
             </div>
           ))}
         </div>
-
       </div>
     </section>
   )

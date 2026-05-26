@@ -1,193 +1,139 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { Menu, X } from 'lucide-react'
+
+const links = [
+  { label: 'About', href: '#about' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Contact', href: '#contact' },
+]
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [active, setActive] = useState('')
+  const [active, setActive] = useState('#about')
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 30)
+
+      const current = links
+        .map((link) => document.querySelector(link.href))
+        .filter(Boolean)
+        .findLast((section) => {
+          const rect = section!.getBoundingClientRect()
+          return rect.top <= 140
+        })
+
+      if (current?.id) setActive(`#${current.id}`)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const links = [
-    { label: 'About', href: '#about' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Contact', href: '#contact' },
-  ]
-
-  const handleLink = (href: string) => {
-    setActive(href)
-    setMenuOpen(false)
-  }
-
   return (
-    <>
-      <nav
-        className="fixed top-0 w-full z-50 transition-all duration-500"
-        style={{
-          background: scrolled || menuOpen ? 'rgba(8,8,8,0.95)' : 'transparent',
-          backdropFilter: scrolled || menuOpen ? 'blur(16px)' : 'none',
-          borderBottom: scrolled || menuOpen ? '1px solid rgba(240,192,96,0.12)' : '1px solid transparent',
-        }}
-      >
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+    <nav
+      className={[
+        'fixed inset-x-0 top-0 z-50 border-b transition-all duration-500',
+        scrolled || menuOpen
+          ? 'border-[#f0c060]/15 bg-[#080808]/85 shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl'
+          : 'border-transparent bg-transparent',
+      ].join(' ')}
+    >
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <a
+          href="#"
+          className="font-serif text-lg font-bold italic tracking-normal text-[#f0c060] transition hover:text-[#ffd577]"
+          style={{ fontFamily: "'Playfair Display', serif" }}
+          aria-label="Go to top"
+        >
+          Vishnupriya Rajesh
+        </a>
 
-          {/* Logo */}
-          <a
-            href="#"
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: '18px',
-              fontWeight: 700,
-              fontStyle: 'italic',
-              color: '#f0c060',
-              textDecoration: 'none',
-              letterSpacing: '-0.01em',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Vishnupriya Rajesh
-          </a>
+        <ul className="hidden items-center gap-9 md:flex">
+          {links.map((link) => {
+            const isActive = active === link.href
 
-          {/* Desktop links */}
-          <ul className="hidden md:flex items-center gap-10" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-            {links.map(link => (
+            return (
               <li key={link.label}>
                 <a
                   href={link.href}
-                  onClick={() => handleLink(link.href)}
-                  style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: '12px',
-                    letterSpacing: '0.15em',
-                    textTransform: 'uppercase',
-                    color: active === link.href ? '#f0c060' : 'rgba(255,255,255,0.6)',
-                    textDecoration: 'none',
-                    transition: 'color 0.25s',
-                    position: 'relative',
-                    paddingBottom: '4px',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#f0c060')}
-                  onMouseLeave={e => {
-                    if (active !== link.href) e.currentTarget.style.color = 'rgba(255,255,255,0.6)'
-                  }}
+                  onClick={() => setMenuOpen(false)}
+                  className={[
+                    'group relative py-2 font-sans text-xs uppercase tracking-[0.18em] transition-colors duration-300',
+                    isActive ? 'text-[#f0c060]' : 'text-white/55 hover:text-[#f0c060]',
+                  ].join(' ')}
                 >
                   {link.label}
-                  {active === link.href && (
-                    <span style={{
-                      position: 'absolute', bottom: 0, left: 0,
-                      width: '100%', height: '1px', background: '#f0c060',
-                    }} />
-                  )}
+                  <span
+                    className={[
+                      'absolute bottom-0 left-0 h-px bg-[#f0c060] transition-all duration-300',
+                      isActive ? 'w-full' : 'w-0 group-hover:w-full',
+                    ].join(' ')}
+                  />
                 </a>
               </li>
-            ))}
-            <li>
-              <a
-                href="mailto:vishnupriyarajesh7b@gmail.com"
-                style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: '12px',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: '#0c0c0c',
-                  background: '#f0c060',
-                  padding: '8px 20px',
-                  borderRadius: '6px',
-                  textDecoration: 'none',
-                  fontWeight: 500,
-                  boxShadow: '0 0 16px rgba(240,192,96,0.2)',
-                  transition: 'background 0.25s',
-                }}
-                onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = '#e0b050'}
-                onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = '#f0c060'}
-              >
-                Hire Me
-              </a>
-            </li>
-          </ul>
+            )
+          })}
 
-          {/* Hamburger — mobile only */}
-          <button
-            className="md:hidden flex flex-col gap-1.5 p-2"
-            onClick={() => setMenuOpen(!menuOpen)}
-            style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
-          >
-            <span style={{
-              display: 'block', width: '22px', height: '1.5px',
-              background: '#f0c060',
-              transition: 'transform 0.3s, opacity 0.3s',
-              transform: menuOpen ? 'translateY(5px) rotate(45deg)' : 'none',
-            }} />
-            <span style={{
-              display: 'block', width: '22px', height: '1.5px',
-              background: '#f0c060',
-              opacity: menuOpen ? 0 : 1,
-              transition: 'opacity 0.3s',
-            }} />
-            <span style={{
-              display: 'block', width: '22px', height: '1.5px',
-              background: '#f0c060',
-              transition: 'transform 0.3s, opacity 0.3s',
-              transform: menuOpen ? 'translateY(-5px) rotate(-45deg)' : 'none',
-            }} />
-          </button>
-
-        </div>
-
-        {/* Mobile dropdown menu */}
-        <div
-          className="md:hidden overflow-hidden transition-all duration-300"
-          style={{ maxHeight: menuOpen ? '320px' : '0px' }}
-        >
-          <div style={{ borderTop: '1px solid rgba(240,192,96,0.1)', padding: '16px 24px 24px' }}>
-            {links.map(link => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => handleLink(link.href)}
-                style={{
-                  display: 'block',
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: '13px',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: active === link.href ? '#f0c060' : 'rgba(255,255,255,0.6)',
-                  textDecoration: 'none',
-                  padding: '12px 0',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
-                  transition: 'color 0.25s',
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
+          <li>
             <a
               href="mailto:vishnupriyarajesh7b@gmail.com"
-              style={{
-                display: 'inline-block',
-                marginTop: '16px',
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: '12px',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: '#0c0c0c',
-                background: '#f0c060',
-                padding: '10px 24px',
-                borderRadius: '6px',
-                textDecoration: 'none',
-                fontWeight: 500,
-              }}
+              className="rounded-md bg-[#f0c060] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#080808] shadow-[0_0_30px_rgba(240,192,96,0.18)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#ffd577] hover:shadow-[0_0_40px_rgba(240,192,96,0.28)] focus:outline-none focus:ring-2 focus:ring-[#f0c060]/60 focus:ring-offset-2 focus:ring-offset-[#080808]"
             >
               Hire Me
             </a>
-          </div>
+          </li>
+        </ul>
+
+        <button
+          type="button"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#f0c060]/20 text-[#f0c060] transition hover:border-[#f0c060]/50 hover:bg-[#f0c060]/10 md:hidden"
+          onClick={() => setMenuOpen((value) => !value)}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+      </div>
+
+      <div
+        className={[
+          'md:hidden overflow-hidden border-t border-[#f0c060]/10 bg-[#080808]/95 backdrop-blur-xl transition-all duration-300',
+          menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0',
+        ].join(' ')}
+      >
+        <div className="px-6 py-5">
+          {links.map((link) => {
+            const isActive = active === link.href
+
+            return (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className={[
+                  'flex items-center justify-between border-b border-white/5 py-4 text-xs uppercase tracking-[0.22em] transition',
+                  isActive ? 'text-[#f0c060]' : 'text-white/60',
+                ].join(' ')}
+              >
+                {link.label}
+                <span className={isActive ? 'h-1.5 w-1.5 rounded-full bg-[#f0c060]' : 'h-1.5 w-1.5 rounded-full bg-white/15'} />
+              </a>
+            )
+          })}
+
+          <a
+            href="mailto:vishnupriyarajesh7b@gmail.com"
+            className="mt-5 inline-flex rounded-md bg-[#f0c060] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#080808]"
+          >
+            Hire Me
+          </a>
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   )
 }
 
